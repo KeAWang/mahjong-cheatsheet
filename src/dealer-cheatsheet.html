@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mahjong — Setup & Deal (Hong Kong rules)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ========== Theme — Jade (matches player-cheatsheet.html) ========== */
+  :root {
+    --bg:        #f1ede0;
+    --paper:     #faf6e9;
+    --paper-2:   #f3ecd6;
+    --ink:       #1a1a12;
+    --ink-soft:  #3d3a30;
+    --ink-muted: #7a7565;
+    --ink-faint: #b0a993;
+    --rule:      #d9cfae;
+    --rule-soft: #e8dfc9;
+    --jade:        #006C00;
+    --jade-deep:   #003500;
+    --jade-bright: #1a8a22;
+    --jade-wash:   rgba(0, 108, 0, 0.08);
+    --red:         #b32424;
+
+    --serif: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+    --sans:  'Inter', system-ui, -apple-system, sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+
+  @page {
+    size: 7.7in 10.2in;
+    margin: 0;
+  }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 8.5pt;
+    line-height: 1.34;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 7.7in;
+    height: 10.2in;
+    margin: 0.5in auto;
+    background: var(--paper);
+    box-shadow: 0 4px 30px rgba(0, 30, 0, 0.12);
+    padding: 0.18in 0.22in;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4pt;
+    overflow: hidden;
+  }
+
+  @media print {
+    html, body { background: var(--paper); }
+    .page {
+      width: 7.7in;
+      height: 10.2in;
+      margin: 0;
+      padding: 0.18in 0.22in;
+      box-shadow: none;
+      background: var(--paper);
+      overflow: hidden;
+    }
+  }
+
+  /* ========== Typography ========== */
+  h1, h2, h3, h4 { margin: 0; font-weight: 500; font-family: var(--serif); }
+  p { margin: 0; }
+  strong { color: var(--ink); font-weight: 600; }
+  em { font-style: italic; color: var(--jade); }
+  .zh { font-family: var(--serif); color: var(--jade); }
+  .pinyin {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.78em;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-left: 2pt;
+  }
+
+  /* ========== Header ========== */
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 4pt;
+  }
+  .head h1 {
+    font-size: 24pt;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .head h1 .zh {
+    color: var(--jade);
+    font-weight: 400;
+    margin-left: 5pt;
+  }
+  .head .sub {
+    font-size: 8.2pt;
+    color: var(--ink-muted);
+    line-height: 1.32;
+    text-align: right;
+    max-width: 3.8in;
+  }
+  .head .sub .ruleset {
+    font-family: var(--mono);
+    font-size: 7pt;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--jade);
+    display: block;
+    margin-bottom: 2pt;
+  }
+
+  /* ========== Section frames ========== */
+  .section {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 4pt;
+    padding: 7pt 10pt 8pt;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 7pt;
+    flex-wrap: wrap;
+    margin-bottom: 5pt;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 7pt;
+    color: var(--jade);
+    letter-spacing: 0.08em;
+    background: var(--jade-wash);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 13pt;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .section-title .zh {
+    color: var(--jade);
+    font-size: 11pt;
+    margin-left: 4pt;
+    font-weight: 400;
+  }
+  .section-lede {
+    font-size: 7.6pt;
+    color: var(--ink-soft);
+    margin-left: auto;
+    text-align: right;
+    max-width: 4.4in;
+    line-height: 1.3;
+  }
+
+  /* ========== Body grid ========== */
+  .body-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 9pt;
+    align-items: stretch;
+  }
+  .body-cols > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4pt;
+    min-width: 0;
+  }
+  .body-cols > div > .section { flex: 1; min-width: 0; }
+
+  /* ========== Step layout ========== */
+  .step {
+    display: grid;
+    grid-template-columns: 16pt 1fr;
+    column-gap: 8pt;
+    align-items: start;
+  }
+  .step + .step { margin-top: 6pt; }
+  .step-num {
+    font-family: var(--serif);
+    font-size: 16pt;
+    color: var(--jade);
+    line-height: 1;
+    font-weight: 500;
+    text-align: center;
+  }
+  .step-body { min-width: 0; }
+  .step-name {
+    font-family: var(--serif);
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 2pt;
+  }
+  .step-name .zh {
+    color: var(--jade);
+    font-weight: 400;
+    margin-left: 3pt;
+  }
+  .step-desc {
+    font-size: 7.8pt;
+    color: var(--ink-soft);
+    line-height: 1.34;
+  }
+  .step-desc + .step-desc { margin-top: 3pt; }
+
+  /* ========== Wall illustration ========== */
+  .wall-fig {
+    display: flex;
+    justify-content: center;
+    margin: 6pt 0 4pt;
+  }
+  .wall-fig svg { display: block; height: auto; max-width: 100%; }
+
+  /* Side-view of one wall with break indicator */
+  .break-fig {
+    margin-top: 4pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .break-fig-cap {
+    font-family: var(--mono);
+    font-size: 5.5pt;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1pt;
+  }
+  .break-fig svg {
+    display: block;
+    width: 100%;
+    max-width: 2.1in;
+    height: auto;
+  }
+
+  /* ========== Break math (dice mapping) ========== */
+  .break-math {
+    margin-top: 5pt;
+    background: var(--paper-2);
+    border: 1px solid var(--rule-soft);
+    border-radius: 3pt;
+    padding: 5pt 7pt 6pt;
+  }
+  .break-math .h {
+    font-family: var(--serif);
+    font-size: 8.4pt;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 3pt;
+  }
+  .break-math .h .sub {
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--ink-muted);
+    font-size: 7pt;
+    margin-left: 4pt;
+  }
+  .seat-table {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 8pt;
+    row-gap: 1.5pt;
+    font-size: 7.4pt;
+    align-items: baseline;
+    margin-top: 2pt;
+  }
+  .seat-table .seat {
+    font-family: var(--serif);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .seat-table .seat .zh {
+    color: var(--jade);
+    margin-right: 3pt;
+    font-size: 8pt;
+  }
+  .seat-table .nums {
+    font-family: var(--mono);
+    color: var(--ink-soft);
+    font-size: 7.6pt;
+  }
+  .break-math p {
+    font-size: 7.2pt;
+    color: var(--ink-soft);
+    line-height: 1.3;
+    margin-top: 4pt;
+  }
+
+  /* ========== Dice cluster ========== */
+  .dice-row {
+    display: flex;
+    align-items: center;
+    gap: 6pt;
+    margin: 4pt 0 0;
+  }
+  .die {
+    font-family: var(--serif);
+    font-size: 18pt;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .dice-eq {
+    font-family: var(--mono);
+    font-size: 8pt;
+    color: var(--ink-muted);
+  }
+  .dice-eq strong {
+    color: var(--jade);
+    font-size: 9pt;
+  }
+
+  /* ========== Hand strip ========== */
+  .tile {
+    display: inline-block;
+    width: var(--tw, 18pt);
+    height: calc(var(--tw, 18pt) * 1.28);
+    background: #fdfbf2;
+    border-radius: 2pt;
+    box-shadow:
+      0 0 0 0.4pt #c9bf9a inset,
+      0 0.6pt 0 #d6cfb6,
+      0 1pt 1.2pt rgba(0, 30, 0, 0.18);
+    overflow: hidden;
+    vertical-align: top;
+    flex-shrink: 0;
+  }
+  .tile img { width: 100%; height: 100%; display: block; pointer-events: none; user-select: none; }
+  .hand-strip {
+    display: flex;
+    gap: 2pt;
+    margin-top: 4pt;
+    flex-wrap: wrap;
+  }
+  .hand-strip .tile { --tw: 14pt; }
+  .hand-strip { flex-wrap: nowrap; }
+  .hand-strip .gap { width: 8pt; }
+  .hand-cap {
+    font-family: var(--mono);
+    font-size: 6pt;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 4pt;
+  }
+
+  /* ========== Bottom notes ========== */
+  .notes {
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 5pt;
+    margin-top: 5pt;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 12pt;
+    row-gap: 5pt;
+  }
+  .notes .note .h {
+    font-family: var(--serif);
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1pt;
+  }
+  .notes .note .h .zh-jade {
+    color: var(--jade);
+    font-weight: 400;
+    margin-left: 2pt;
+  }
+  .notes .note p {
+    font-size: 7.1pt;
+    color: var(--ink-soft);
+    line-height: 1.32;
+  }
+
+  /* ========== Seat compass (small) ========== */
+  .compass {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 0.95in;
+    height: 0.95in;
+    margin: 4pt auto 0;
+    border: 1px solid var(--rule);
+    border-radius: 3pt;
+    background: var(--paper-2);
+    position: relative;
+    overflow: hidden;
+  }
+  .compass .c-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    color: var(--jade);
+    font-size: 12pt;
+    gap: 0;
+  }
+  .compass .c-cell .c-py {
+    font-size: 5.5pt;
+    color: var(--ink-muted);
+    font-style: italic;
+    font-family: var(--serif);
+    margin-top: 0;
+  }
+  .compass .c-mid {
+    font-family: var(--mono);
+    color: var(--ink-faint);
+    font-size: 6pt;
+    text-align: center;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-style: normal;
+  }
+  .compass .c-cell.c-east {
+    background: var(--jade-wash);
+    border-radius: 2pt;
+  }
+  .compass-note {
+    font-size: 6.6pt;
+    color: var(--ink-muted);
+    text-align: center;
+    line-height: 1.3;
+    margin-top: 4pt;
+    font-style: italic;
+    max-width: 1.6in;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ========== Footer ========== */
+  .foot {
+    border-top: 1px solid var(--rule);
+    padding-top: 3pt;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 6.5pt;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+  }
+  .foot a { color: var(--ink-muted); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ============ HEADER ============ -->
+  <header class="head">
+    <h1>Setup<span class="zh">開局</span><span class="pinyin" style="font-size:11pt">kāi jú</span></h1>
+    <div class="sub">
+      <span class="ruleset">Hong Kong ruleset · 4 players · pre-game</span>
+      How to seat, build the wall, break it with dice, and deal the opening 13 tiles.
+    </div>
+  </header>
+
+  <!-- ============ MAIN BODY (2-col) ============ -->
+  <div class="body-cols">
+
+    <!-- ===== LEFT COLUMN: Steps 01 + 02 ===== -->
+    <div>
+
+      <!-- 01 · Seat -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">01 · Seat</span>
+          <span class="section-title">Choose the first dealer<span class="zh">莊家</span><span class="pinyin">zhuāngjiā</span></span>
+        </div>
+
+        <div class="step">
+          <span class="step-num">·</span>
+          <div class="step-body">
+            <p class="step-desc"><strong>Wash the tiles</strong> <span class="zh">洗牌</span><span class="pinyin">xǐ pái</span> — place all 136 tiles face-down on the table and push them around in large circular motions until well shuffled.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-num">·</span>
+          <div class="step-body">
+            <p class="step-desc">Each player rolls <strong>2 dice</strong>. The highest total takes the <strong>East seat</strong> <span class="zh">東</span><span class="pinyin">dōng</span> and becomes the first dealer <span class="zh">莊家</span><span class="pinyin">zhuāngjiā</span>. Ties re-roll between the tied players only.</p>
+            <p class="step-desc">Play passes <em>counter-clockwise</em> to the <strong>player on your right</strong> — East → South → West → North → East …</p>
+          </div>
+        </div>
+
+        <div class="compass" aria-label="Seating compass — mahjong convention">
+          <div></div>
+          <div class="c-cell"><span>西</span><span class="c-py">xī</span></div>
+          <div></div>
+          <div class="c-cell"><span>北</span><span class="c-py">běi</span></div>
+          <div class="c-mid">turn<br>↺<br>order</div>
+          <div class="c-cell"><span>南</span><span class="c-py">nán</span></div>
+          <div></div>
+          <div class="c-cell c-east"><span>東</span><span class="c-py">dōng</span></div>
+          <div></div>
+        </div>
+        <div class="compass-note">Mahjong seats are arranged opposite of a Western compass — <strong>East</strong> (the dealer) is at the bottom.</div>
+      </section>
+
+      <!-- 02 · Wall -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">02 · Wall</span>
+          <span class="section-title">Build the wall<span class="zh">築牆</span><span class="pinyin">zhù qiáng</span></span>
+        </div>
+
+        <div class="step">
+          <span class="step-num">·</span>
+          <div class="step-body">
+            <p class="step-desc">Each player builds a row of tiles in front of them: <strong>17 stacks long × 2 tiles high</strong>, face-down. Push all four walls together to form a hollow square in the center of the table.</p>
+            <p class="step-desc" style="font-family: var(--mono); color: var(--ink-muted); font-size: 7.4pt;">17 × 2 × 4 sides = 136 tiles ✓</p>
+          </div>
+        </div>
+
+        <div class="wall-fig">
+          <svg viewBox="0 0 200 200" width="200" height="200" aria-hidden="true">
+            <!-- Square wall: 4 sides of 17 stacks × 2 high -->
+            <g stroke="#b0a993" stroke-width="0.5" fill="#e8dfc9">
+              <!-- TOP side -->
+              <g transform="translate(40,28)">
+                <rect width="120" height="14" rx="1.4"/>
+                <g stroke="#c9bf9a">
+                  <line x1="7.06" y1="0" x2="7.06" y2="14"/><line x1="14.12" y1="0" x2="14.12" y2="14"/>
+                  <line x1="21.18" y1="0" x2="21.18" y2="14"/><line x1="28.24" y1="0" x2="28.24" y2="14"/>
+                  <line x1="35.29" y1="0" x2="35.29" y2="14"/><line x1="42.35" y1="0" x2="42.35" y2="14"/>
+                  <line x1="49.41" y1="0" x2="49.41" y2="14"/><line x1="56.47" y1="0" x2="56.47" y2="14"/>
+                  <line x1="63.53" y1="0" x2="63.53" y2="14"/><line x1="70.59" y1="0" x2="70.59" y2="14"/>
+                  <line x1="77.65" y1="0" x2="77.65" y2="14"/><line x1="84.71" y1="0" x2="84.71" y2="14"/>
+                  <line x1="91.76" y1="0" x2="91.76" y2="14"/><line x1="98.82" y1="0" x2="98.82" y2="14"/>
+                  <line x1="105.88" y1="0" x2="105.88" y2="14"/><line x1="112.94" y1="0" x2="112.94" y2="14"/>
+                </g>
+              </g>
+              <!-- BOTTOM side -->
+              <g transform="translate(40,158)">
+                <rect width="120" height="14" rx="1.4"/>
+                <g stroke="#c9bf9a">
+                  <line x1="7.06" y1="0" x2="7.06" y2="14"/><line x1="14.12" y1="0" x2="14.12" y2="14"/>
+                  <line x1="21.18" y1="0" x2="21.18" y2="14"/><line x1="28.24" y1="0" x2="28.24" y2="14"/>
+                  <line x1="35.29" y1="0" x2="35.29" y2="14"/><line x1="42.35" y1="0" x2="42.35" y2="14"/>
+                  <line x1="49.41" y1="0" x2="49.41" y2="14"/><line x1="56.47" y1="0" x2="56.47" y2="14"/>
+                  <line x1="63.53" y1="0" x2="63.53" y2="14"/><line x1="70.59" y1="0" x2="70.59" y2="14"/>
+                  <line x1="77.65" y1="0" x2="77.65" y2="14"/><line x1="84.71" y1="0" x2="84.71" y2="14"/>
+                  <line x1="91.76" y1="0" x2="91.76" y2="14"/><line x1="98.82" y1="0" x2="98.82" y2="14"/>
+                  <line x1="105.88" y1="0" x2="105.88" y2="14"/><line x1="112.94" y1="0" x2="112.94" y2="14"/>
+                </g>
+              </g>
+              <!-- LEFT side -->
+              <g transform="translate(26,42)">
+                <rect width="14" height="116" rx="1.4"/>
+                <g stroke="#c9bf9a">
+                  <line x1="0" y1="6.82" x2="14" y2="6.82"/><line x1="0" y1="13.65" x2="14" y2="13.65"/>
+                  <line x1="0" y1="20.47" x2="14" y2="20.47"/><line x1="0" y1="27.29" x2="14" y2="27.29"/>
+                  <line x1="0" y1="34.12" x2="14" y2="34.12"/><line x1="0" y1="40.94" x2="14" y2="40.94"/>
+                  <line x1="0" y1="47.76" x2="14" y2="47.76"/><line x1="0" y1="54.59" x2="14" y2="54.59"/>
+                  <line x1="0" y1="61.41" x2="14" y2="61.41"/><line x1="0" y1="68.24" x2="14" y2="68.24"/>
+                  <line x1="0" y1="75.06" x2="14" y2="75.06"/><line x1="0" y1="81.88" x2="14" y2="81.88"/>
+                  <line x1="0" y1="88.71" x2="14" y2="88.71"/><line x1="0" y1="95.53" x2="14" y2="95.53"/>
+                  <line x1="0" y1="102.35" x2="14" y2="102.35"/><line x1="0" y1="109.18" x2="14" y2="109.18"/>
+                </g>
+              </g>
+              <!-- RIGHT side -->
+              <g transform="translate(160,42)">
+                <rect width="14" height="116" rx="1.4"/>
+                <g stroke="#c9bf9a">
+                  <line x1="0" y1="6.82" x2="14" y2="6.82"/><line x1="0" y1="13.65" x2="14" y2="13.65"/>
+                  <line x1="0" y1="20.47" x2="14" y2="20.47"/><line x1="0" y1="27.29" x2="14" y2="27.29"/>
+                  <line x1="0" y1="34.12" x2="14" y2="34.12"/><line x1="0" y1="40.94" x2="14" y2="40.94"/>
+                  <line x1="0" y1="47.76" x2="14" y2="47.76"/><line x1="0" y1="54.59" x2="14" y2="54.59"/>
+                  <line x1="0" y1="61.41" x2="14" y2="61.41"/><line x1="0" y1="68.24" x2="14" y2="68.24"/>
+                  <line x1="0" y1="75.06" x2="14" y2="75.06"/><line x1="0" y1="81.88" x2="14" y2="81.88"/>
+                  <line x1="0" y1="88.71" x2="14" y2="88.71"/><line x1="0" y1="95.53" x2="14" y2="95.53"/>
+                  <line x1="0" y1="102.35" x2="14" y2="102.35"/><line x1="0" y1="109.18" x2="14" y2="109.18"/>
+                </g>
+              </g>
+            </g>
+            <!-- Compass labels (mahjong convention: East at bottom) -->
+            <g font-family="Source Serif 4, serif" fill="#006C00" font-size="11">
+              <text x="100" y="20" text-anchor="middle">西 <tspan font-size="8">xī</tspan></text>
+              <text x="100" y="190" text-anchor="middle">東 <tspan font-size="8">dōng</tspan></text>
+              <text x="14" y="103" text-anchor="middle">北 <tspan font-size="8">běi</tspan></text>
+              <text x="186" y="103" text-anchor="middle">南 <tspan font-size="8">nán</tspan></text>
+            </g>
+            <!-- Center caption -->
+            <g fill="#7a7565" font-family="IBM Plex Mono, monospace" font-size="6.5">
+              <text x="100" y="92" text-anchor="middle">17 × 2 × 4</text>
+              <text x="100" y="102" text-anchor="middle">= 136 tiles</text>
+              <text x="100" y="115" text-anchor="middle" font-size="9" fill="#006C00">↺</text>
+            </g>
+            <!-- Rotation arrows tracing counter-clockwise (E→S→W→N): SE→NE→NW→SW -->
+            <g fill="#006C00" opacity="0.55" font-family="serif" font-size="9" text-anchor="middle">
+              <text x="138" y="52">↖</text>
+              <text x="138" y="156">↗</text>
+              <text x="62" y="156">↘</text>
+              <text x="62" y="52">↙</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===== RIGHT COLUMN: Steps 03 + 04 ===== -->
+    <div>
+
+      <!-- 03 · Break -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">03 · Break</span>
+          <span class="section-title">Break the wall<span class="zh">開門</span><span class="pinyin">kāi mén</span></span>
+        </div>
+
+        <div class="step">
+          <span class="step-num">·</span>
+          <div class="step-body">
+            <p class="step-desc">The dealer rolls <strong>2 dice</strong>. The total does <em>two things at once</em> — it picks <strong>whose wall</strong> to break and <strong>where on it</strong> to break.</p>
+          </div>
+        </div>
+
+        <div class="dice-row">
+          <span class="die">⚂</span>
+          <span class="die">⚄</span>
+          <span class="dice-eq">= <strong>8</strong>  (example)</span>
+        </div>
+
+        <div class="break-math">
+          <div class="h">① Whose wall? <span class="sub">Counting counter-clockwise from East = 1 (E → S → W → N).</span></div>
+          <div class="seat-table">
+            <span class="seat"><span class="zh">東</span><span class="pinyin">dōng</span> East</span><span class="nums">1 · 5 · 9</span>
+            <span class="seat"><span class="zh">南</span><span class="pinyin">nán</span> South</span><span class="nums">2 · 6 · 10</span>
+            <span class="seat"><span class="zh">西</span><span class="pinyin">xī</span> West</span><span class="nums">3 · 7 · 11</span>
+            <span class="seat"><span class="zh">北</span><span class="pinyin">běi</span> North</span><span class="nums">4 · 8 · 12</span>
+          </div>
+          <p>Total of <strong>8</strong> → <em>North</em>. Break that wall.</p>
+        </div>
+
+        <div class="break-math" style="margin-top: 4pt;">
+          <div class="h">② Where on it? <span class="sub">Count the dice total in stacks from the right end of that wall.</span></div>
+          <p style="margin-top: 2pt;">Tiles to the <strong>left</strong> of the break = <strong>live wall</strong> (drawn from). Tiles to the <strong>right</strong> = <strong>dead wall</strong>.</p>
+        </div>
+
+        <!-- Side-view of one wall: 17 stacks × 2 tiles, broken at stack 8 from right -->
+        <div class="break-fig">
+          <div class="break-fig-cap">North wall · break at stack 8 from the right</div>
+          <svg viewBox="0 0 195 36" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <filter id="wall-tile-shadow" x="-20%" y="-20%" width="140%" height="160%">
+                <feDropShadow dx="0" dy="0.4" stdDeviation="0.3" flood-color="#001e00" flood-opacity="0.18"/>
+              </filter>
+            </defs>
+            <!-- Live wall stacks 1–9 (from left) -->
+            <g fill="#fdfbf2" stroke="#c9bf9a" stroke-width="0.5" filter="url(#wall-tile-shadow)">
+              <rect x="6"    y="11" width="9" height="12" rx="0.8"/>
+              <rect x="16.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="27"   y="11" width="9" height="12" rx="0.8"/>
+              <rect x="37.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="48"   y="11" width="9" height="12" rx="0.8"/>
+              <rect x="58.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="69"   y="11" width="9" height="12" rx="0.8"/>
+              <rect x="79.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="90"   y="11" width="9" height="12" rx="0.8"/>
+            </g>
+            <!-- Dead wall stacks 10–17 — dimmed -->
+            <g fill="#e8dfc9" opacity="0.55" stroke="#c9bf9a" stroke-width="0.5" filter="url(#wall-tile-shadow)">
+              <rect x="100.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="111"   y="11" width="9" height="12" rx="0.8"/>
+              <rect x="121.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="132"   y="11" width="9" height="12" rx="0.8"/>
+              <rect x="142.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="153"   y="11" width="9" height="12" rx="0.8"/>
+              <rect x="163.5" y="11" width="9" height="12" rx="0.8"/>
+              <rect x="174"   y="11" width="9" height="12" rx="0.8"/>
+            </g>
+            <!-- Highlight first dead-wall stack (position 10 from left) -->
+            <rect x="100.5" y="11" width="9" height="12" rx="0.8" fill="none" stroke="#006C00" stroke-width="1"/>
+            <!-- Break indicator line to the left of the highlighted stack -->
+            <line x1="99.75" y1="9" x2="99.75" y2="25" stroke="#006C00" stroke-width="1.4"/>
+            <text x="99.75" y="7" font-family="IBM Plex Mono, monospace" font-size="4.5" fill="#006C00" text-anchor="middle" font-weight="500">break</text>
+            <!-- Bottom labels -->
+            <g font-family="IBM Plex Mono, monospace" font-size="4.5" fill="#7a7565" text-anchor="middle">
+              <text x="49"  y="33">←  LIVE WALL  (drawn from here)</text>
+              <text x="143" y="33">DEAD WALL  →</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- 04 · Deal -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">04 · Deal</span>
+          <span class="section-title">Deal the tiles<span class="zh">發牌</span><span class="pinyin">fā pái</span></span>
+        </div>
+
+        <div class="step">
+          <span class="step-num">·</span>
+          <div class="step-body">
+            <p class="step-desc">Starting from the break point, players take turns grabbing <strong>4 tiles at a time</strong>, going <em>counter-clockwise</em> (E → S → W → N).</p>
+            <p class="step-desc">After three rounds each player has <strong>12 tiles</strong>. Each takes <strong>1 more</strong> → 13 tiles. Finally the dealer takes one extra → <strong>14 tiles</strong>, then discards one to start play.</p>
+          </div>
+        </div>
+
+        <div class="hand-cap">Dealer's opening hand · 14 tiles</div>
+        <div class="hand-strip">
+          <span class="tile back"></span><span class="tile back"></span><span class="tile back"></span><span class="tile back"></span>
+          <span class="tile back"></span><span class="tile back"></span><span class="tile back"></span><span class="tile back"></span>
+          <span class="tile back"></span><span class="tile back"></span><span class="tile back"></span><span class="tile back"></span>
+          <span class="tile back"></span><span class="tile back"></span>
+        </div>
+        <div class="hand-cap">Other three players · 13 tiles each</div>
+        <div class="hand-strip">
+          <span class="tile back"></span><span class="tile back"></span><span class="tile back"></span><span class="tile back"></span>
+          <span class="tile back"></span><span class="tile back"></span><span class="tile back"></span><span class="tile back"></span>
+          <span class="tile back"></span><span class="tile back"></span><span class="tile back"></span><span class="tile back"></span>
+          <span class="tile back"></span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============ BOTTOM RULES ============ -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">·  Rules</span>
+      <span class="section-title">Wall &amp; round mechanics</span>
+    </div>
+
+    <div class="notes" style="border-top: none; padding-top: 0; margin-top: 0;">
+      <div class="note">
+        <div class="h">Dead wall</div>
+        <p>The last <strong>14 tiles</strong> of the wall (to the right of the break) are reserved for Gàng replacements — never drawn in regular play.</p>
+      </div>
+      <div class="note">
+        <div class="h">Gàng replacement</div>
+        <p>When a player declares a <span class="zh">杠</span><span class="pinyin">gàng</span> (4 of a kind), they draw <strong>one extra tile</strong> from the end of the dead wall to keep their hand at 14 → discard.</p>
+      </div>
+      <div class="note">
+        <div class="h">Dealer rotation</div>
+        <p>The dealer keeps the East seat <em>as long as they keep winning</em>. When any other player wins, the deal passes <strong>counter-clockwise</strong> — South becomes East, West becomes South, and so on.</p>
+      </div>
+      <div class="note">
+        <div class="h">Drawn hand <span class="zh-jade">荒莊</span><span class="pinyin">huāng zhuāng</span></div>
+        <p>If the live wall empties with no winner, the round is a draw — no payouts and the dealer keeps East.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot">
+    <span>Mahjong · Hong Kong rules · setup &amp; deal</span>
+    <span>made by <a href="https://x.com/heyyalexwang" target="_blank" rel="noopener">@heyyalexwang</a></span>
+  </footer>
+
+</div>
+
+</body>
+</html>

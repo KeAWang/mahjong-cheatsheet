@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mahjong — Printable Reference (Hong Kong rules)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ========== Theme — Jade (from themahjong.guide) ========== */
+  :root {
+    --bg:        #f1ede0;
+    --paper:     #faf6e9;
+    --paper-2:   #f3ecd6;
+    --ink:       #1a1a12;
+    --ink-soft:  #3d3a30;
+    --ink-muted: #7a7565;
+    --ink-faint: #b0a993;
+    --rule:      #d9cfae;
+    --rule-soft: #e8dfc9;
+    --jade:        #006C00;
+    --jade-deep:   #003500;
+    --jade-bright: #1a8a22;
+    --jade-wash:   rgba(0, 108, 0, 0.08);
+    --red:         #b32424;
+
+    --serif: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+    --sans:  'Inter', system-ui, -apple-system, sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+
+  /* ========== Page setup — borderless PDF, content sized to fit US Letter with 0.4in margins ========== */
+  @page {
+    size: 7.7in 10.2in;
+    margin: 0;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 8.5pt;
+    line-height: 1.34;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* On-screen: simulate the printable area so it's WYSIWYG. */
+  .page {
+    width: 7.7in;
+    height: 10.2in;
+    margin: 0.5in auto;
+    background: var(--paper);
+    box-shadow: 0 4px 30px rgba(0, 30, 0, 0.12);
+    padding: 0.18in 0.22in;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4pt;
+    overflow: hidden;
+  }
+
+  @media print {
+    html, body { background: var(--paper); }
+    .page {
+      width: 7.7in;
+      height: 10.2in;
+      margin: 0;
+      padding: 0.18in 0.22in;
+      box-shadow: none;
+      background: var(--paper);
+      overflow: hidden;
+    }
+  }
+
+  /* ========== Typography ========== */
+  h1, h2, h3, h4 { margin: 0; font-weight: 500; font-family: var(--serif); }
+  p { margin: 0; }
+  strong { color: var(--ink); font-weight: 600; }
+  em { font-style: italic; color: var(--jade); }
+
+  .zh { font-family: var(--serif); }
+  /* Small pinyin reading next to a green Chinese character */
+  .pinyin {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.78em;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-left: 2pt;
+    letter-spacing: 0;
+  }
+
+  /* ========== Header ========== */
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 4pt;
+  }
+  .head h1 {
+    font-size: 24pt;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .head h1 .zh {
+    color: var(--jade);
+    font-weight: 400;
+    margin-left: 5pt;
+  }
+  .head h1 .title-pinyin {
+    font-family: var(--serif);
+    font-size: 11pt;
+    font-style: italic;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-left: 6pt;
+    letter-spacing: 0;
+    vertical-align: 4pt;
+  }
+  .head .sub {
+    font-size: 8.2pt;
+    color: var(--ink-muted);
+    line-height: 1.32;
+    text-align: right;
+    max-width: 3.8in;
+  }
+  .head .sub .ruleset {
+    font-family: var(--mono);
+    font-size: 7pt;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--jade);
+    display: block;
+    margin-bottom: 2pt;
+  }
+  .head .sub .tagline {
+    display: block;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .head .sub .goal {
+    display: block;
+    margin-top: 2pt;
+    padding-left: 6pt;
+    border-left: 2pt solid var(--jade);
+    color: var(--ink-soft);
+    text-align: left;
+  }
+  .head .sub .goal-label {
+    font-family: var(--mono);
+    font-size: 6.6pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--jade);
+    margin-right: 5pt;
+    font-weight: 600;
+  }
+
+  /* ========== Section frames ========== */
+  .section {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 4pt;
+    padding: 7pt 10pt 8pt;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 7pt;
+    flex-wrap: wrap;
+    margin-bottom: 4pt;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 7pt;
+    color: var(--jade);
+    letter-spacing: 0.08em;
+    background: var(--jade-wash);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 12pt;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .section-title .zh {
+    color: var(--jade);
+    font-size: 10.5pt;
+    margin-left: 4pt;
+    font-weight: 400;
+  }
+  /* Lede: only used full-width sections (e.g. 01) — pushed right inline */
+  .section-head .section-lede {
+    font-size: 7.6pt;
+    color: var(--ink-soft);
+    margin-left: auto;
+    text-align: right;
+    max-width: 4.4in;
+    line-height: 1.3;
+  }
+  /* Intro: a paragraph block below the head, used in narrow body-col sections */
+  .section-intro {
+    font-size: 7.4pt;
+    color: var(--ink-soft);
+    margin: 0 0 5pt;
+    line-height: 1.35;
+  }
+
+  /* ========== Tile rendering ========== */
+  .tile {
+    display: inline-block;
+    width: var(--tw, 26pt);
+    height: calc(var(--tw, 26pt) * 1.28);
+    background: #fdfbf2;
+    border-radius: 2.5pt;
+    box-shadow:
+      0 0 0 0.4pt #c9bf9a inset,
+      0 0.6pt 0 #d6cfb6,
+      0 1pt 1.2pt rgba(0, 30, 0, 0.18);
+    overflow: hidden;
+    vertical-align: top;
+    flex-shrink: 0;
+  }
+  .tile img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+  }
+  .tile.xs { --tw: 12pt; border-radius: 1.5pt; }
+  .tile.sm { --tw: 17pt; border-radius: 2pt; }
+  .tile.md { --tw: 24pt; }
+  .tile.lg { --tw: 32pt; }
+  /* Suit-chart tile (Section 01) */
+  .tile.suit { --tw: 28pt; border-radius: 2.8pt; }
+  /* Meld example tile (Section 02) */
+  .tile.meld { --tw: 21pt; border-radius: 2.4pt; }
+
+  /* ========== Section 01 — Tiles ========== */
+  .tiles-grid {
+    display: grid;
+    grid-template-columns: 0.9in 1fr;
+    row-gap: 1pt;
+    column-gap: 9pt;
+    align-items: center;
+  }
+  .suit-label {
+    font-family: var(--serif);
+    font-size: 9.5pt;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .suit-label .zh {
+    color: var(--jade);
+    font-weight: 500;
+    margin-right: 3pt;
+    font-size: 10.5pt;
+  }
+  .suit-label .desc {
+    display: block;
+    font-family: var(--sans);
+    font-size: 6.4pt;
+    color: var(--ink-muted);
+    margin-top: 1pt;
+    font-weight: 400;
+    line-height: 1.22;
+  }
+  .tile-row {
+    display: flex;
+    gap: 3pt;
+    align-items: flex-end;
+  }
+  .tile-row .num {
+    font-family: var(--mono);
+    font-size: 6pt;
+    color: var(--ink-faint);
+    width: 13pt;
+    text-align: center;
+    margin-top: 1pt;
+  }
+  .tile-with-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1pt;
+  }
+  /* Honor-tile pinyin label under each tile */
+  .honor-group .tile-with-num .num {
+    font-family: var(--sans);
+    font-size: 6pt;
+    color: var(--ink-muted);
+    width: 28pt;
+    margin-top: 1pt;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .honor-group .tile-with-num .num .zh {
+    color: var(--jade);
+    font-weight: 500;
+    margin-right: 1pt;
+  }
+  .honor-group .tile-with-num .num .pinyin {
+    margin-left: 0;
+    color: var(--ink-soft);
+    font-size: 6pt;
+  }
+  .honors-row {
+    display: flex;
+    gap: 16pt;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .honor-group {
+    display: flex;
+    gap: 3pt;
+    align-items: flex-start;
+  }
+
+  /* ========== Two-column body ========== */
+  .body-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr);
+    gap: 9pt;
+    align-items: stretch;
+  }
+  .body-cols > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+  }
+  .body-cols > div > .section { flex: 1; min-width: 0; }
+
+  /* ========== Section 02 — How you win (melds) ========== */
+  .example-hand {
+    background: var(--paper-2);
+    border: 1px solid var(--rule-soft);
+    border-radius: 3pt;
+    padding: 5pt 6pt 6pt;
+    margin: 0 0 7pt;
+  }
+  .example-hand .eh-label {
+    font-family: var(--mono);
+    font-size: 5.8pt;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4pt;
+  }
+  .example-hand .eh-row {
+    display: flex;
+    gap: 6pt;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .eh-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2pt;
+  }
+  .eh-group .eh-tag {
+    font-family: var(--mono);
+    font-size: 5.5pt;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  /* Slightly smaller tile for the 14-tile example so the row fits on one line */
+  .tile.eh { --tw: 16pt; border-radius: 1.8pt; }
+
+  .melds-h {
+    font-family: var(--serif);
+    font-size: 8.4pt;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 4pt;
+  }
+
+  .meld-card {
+    border-top: 1px solid var(--rule-soft);
+    padding: 5pt 0 4pt;
+  }
+  .meld-card:first-of-type { border-top: none; padding-top: 0; }
+  .meld-header {
+    display: flex;
+    align-items: baseline;
+    gap: 7pt;
+    margin-bottom: 3pt;
+  }
+  .meld-name {
+    font-family: var(--serif);
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .meld-name .zh {
+    color: var(--jade);
+    font-weight: 400;
+    margin-right: 2pt;
+    font-size: 10pt;
+  }
+  .meld-rule {
+    font-size: 7.4pt;
+    color: var(--ink-muted);
+    line-height: 1.2;
+  }
+  .meld-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6pt;
+    margin: 1pt 0;
+  }
+  .meld-group {
+    display: inline-flex;
+    gap: 1pt;
+    align-items: flex-end;
+  }
+  .meld-foot {
+    margin-top: 2pt;
+    font-size: 6.6pt;
+    color: var(--ink-muted);
+    line-height: 1.25;
+    font-style: italic;
+  }
+
+  /* ========== Section 03 — Turn move vs. discard claims ========== */
+  .turn-block { /* logical wrapper */ }
+  .turn-label {
+    font-family: var(--mono);
+    font-size: 6.4pt;
+    color: var(--jade);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    margin-bottom: 4pt;
+  }
+  .turn-divider {
+    margin: 6pt 0;
+    text-align: center;
+    position: relative;
+    height: 1px;
+  }
+  .turn-divider::before,
+  .turn-divider::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 45%;
+    height: 1px;
+    background: var(--rule);
+  }
+  .turn-divider::before { left: 0; }
+  .turn-divider::after  { right: 0; }
+  .turn-divider span {
+    display: inline-block;
+    position: relative;
+    top: -8pt;
+    padding: 0 5pt;
+    background: var(--paper);
+    color: var(--jade);
+    font-size: 11pt;
+    line-height: 1;
+  }
+
+  .move-head {
+    display: flex;
+    align-items: baseline;
+    gap: 7pt;
+    flex-wrap: wrap;
+  }
+  .move-name {
+    font-family: var(--serif);
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .move-name .zh {
+    color: var(--jade);
+    font-weight: 400;
+    margin: 0 3pt;
+    font-size: 10.5pt;
+  }
+  .move-desc {
+    font-size: 7.5pt;
+    color: var(--ink-soft);
+    line-height: 1.32;
+    margin-top: 2pt;
+  }
+  .move-special {
+    list-style: none;
+    padding: 0;
+    margin: 3pt 0 0;
+    font-size: 6.9pt;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+  .move-special li {
+    position: relative;
+    padding-left: 18pt;
+    margin-top: 1pt;
+  }
+  .move-special li::before {
+    content: "IF:";
+    position: absolute;
+    left: 0;
+    color: var(--jade);
+    font-family: var(--mono);
+    font-size: 6.4pt;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+  }
+
+  /* Turn-order rules block */
+  .turn-rules {
+    margin-top: 6pt;
+    padding-top: 5pt;
+    border-top: 1px dashed var(--rule-soft);
+  }
+  .turn-rules .rule-h {
+    font-family: var(--serif);
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2pt;
+  }
+  .turn-rules ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 7pt;
+    color: var(--ink-soft);
+    line-height: 1.32;
+  }
+  .turn-rules li {
+    position: relative;
+    padding-left: 8pt;
+    margin-top: 1.5pt;
+  }
+  .turn-rules li::before {
+    content: '•';
+    position: absolute;
+    left: 1pt;
+    color: var(--jade);
+    font-weight: 600;
+  }
+  .turn-rules b {
+    font-family: var(--serif);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .turn-rules em {
+    color: var(--jade);
+    font-style: italic;
+  }
+  .turn-rules .zh-jade {
+    color: var(--jade);
+    font-style: italic;
+    margin-left: 1pt;
+  }
+
+  /* The 4 priority-ordered claims under move 2 */
+  .claims {
+    margin-top: 5pt;
+    background: var(--jade-wash);
+    border-left: 2.2pt solid var(--jade);
+    border-radius: 0 3pt 3pt 0;
+    padding: 4pt 7pt 5pt;
+    display: flex;
+    flex-direction: column;
+    gap: 4pt;
+  }
+  .claim {
+    display: grid;
+    grid-template-columns: 14pt 16pt 1fr;
+    column-gap: 5pt;
+    align-items: start;
+  }
+  .claim-rank {
+    font-family: var(--mono);
+    font-size: 9pt;
+    color: var(--jade);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .claim-zh {
+    font-family: var(--serif);
+    font-size: 12pt;
+    color: var(--jade);
+    line-height: 1;
+    text-align: center;
+    font-weight: 500;
+  }
+  .claim-body { min-width: 0; }
+  .claim-line {
+    display: flex;
+    align-items: baseline;
+    gap: 5pt;
+    flex-wrap: wrap;
+  }
+  .claim-name {
+    font-family: var(--serif);
+    font-size: 8.4pt;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .claim-tag {
+    font-family: var(--mono);
+    font-size: 5.6pt;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+  .claim-tag.claim-tag-warn { color: var(--red); }
+  .claim-desc {
+    font-size: 7pt;
+    color: var(--ink-soft);
+    line-height: 1.28;
+    margin-top: 1pt;
+  }
+
+  /* Extra notes at bottom of section 03 */
+  .extras {
+    margin-top: auto; /* push to bottom of column when stretched */
+    padding-top: 6pt;
+    display: flex;
+    flex-direction: column;
+    gap: 4pt;
+  }
+  .extras .extra {
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 3pt;
+  }
+  .extras .extra .h {
+    font-family: var(--serif);
+    font-size: 7.8pt;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1pt;
+  }
+  .extras .extra .zh-jade {
+    color: var(--jade);
+    font-style: italic;
+    font-weight: 400;
+    margin-left: 2pt;
+  }
+  .extras .extra p {
+    font-size: 7pt;
+    color: var(--ink-soft);
+    line-height: 1.32;
+  }
+  .priority .ladder .r {
+    font-family: var(--mono);
+    color: var(--jade);
+    font-weight: 500;
+    text-align: center;
+  }
+  .priority .ladder .n {
+    font-family: var(--serif);
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .priority .ladder .d {
+    color: var(--ink-soft);
+    line-height: 1.25;
+  }
+
+  /* ========== Footer ========== */
+  .foot {
+    border-top: 1px solid var(--rule);
+    padding-top: 3pt;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 6.5pt;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+  }
+  .foot a { color: var(--ink-muted); text-decoration: none; }
+
+  /* Tile pair/triple visuals */
+  .meld { display: inline-flex; gap: 1pt; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ============ HEADER ============ -->
+  <header class="head">
+    <h1>Mahjong<span class="zh">麻將</span><span class="title-pinyin">májiàng</span></h1>
+    <div class="sub">
+      <span class="ruleset">Hong Kong ruleset · 136 tiles · 4 players</span>
+      <span class="tagline">A one-page reference for beginners (standard hand only).</span>
+      <span class="goal"><span class="goal-label">Goal</span>Be the first to assemble a winning hand — <strong>4 melds + 1 pair</strong> (14 tiles) — by drawing tiles or claiming others' discards.</span>
+    </div>
+  </header>
+
+  <!-- ============ 01 TILES ============ -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01 · Tiles</span>
+      <span class="section-title">The deck<span class="zh">牌</span><span class="pinyin">pái</span></span>
+      <span class="section-lede">34 unique designs × 4 copies = <strong>136 tiles</strong>. Three numbered suits 1–9, plus four winds and three dragons (the "honor" tiles).</span>
+    </div>
+
+    <div class="tiles-grid">
+      <div class="suit-label">
+        <span class="zh">萬</span>Characters
+        <span class="desc">Wàn — "ten thousand". Numbered 1–9.</span>
+      </div>
+      <div class="tile-row" id="row-wan"></div>
+
+      <div class="suit-label">
+        <span class="zh">條</span>Bamboo
+        <span class="desc">Tiáo — sticks. The 1-bamboo is a bird.</span>
+      </div>
+      <div class="tile-row" id="row-tiao"></div>
+
+      <div class="suit-label">
+        <span class="zh">餅</span>Dots
+        <span class="desc">Bǐng — coins. Numbered 1–9.</span>
+      </div>
+      <div class="tile-row" id="row-bing"></div>
+
+      <div class="suit-label">
+        <span class="zh">風 · 箭</span> Honors
+        <span class="desc">Winds · Dragons / Fēng · Jiàn. Can't be in a chī (3-in-a-row).</span>
+      </div>
+      <div class="honors-row">
+        <div class="honor-group" id="row-wind"></div>
+        <div class="honor-group" id="row-dragon"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAIN BODY (2-col) ============ -->
+  <div class="body-cols">
+
+    <!-- ----- LEFT COLUMN ----- -->
+    <div>
+
+      <!-- 02 — How you win (melds-focused) -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">02 · Win</span>
+          <span class="section-title">How you win<span class="zh">胡</span><span class="pinyin">hú</span></span>
+        </div>
+        <div class="section-intro">
+          A standard winning hand = <strong>4 melds + 1 duì</strong> = <strong>14 tiles</strong>. You hold 13; draw or claim a 14th tile that completes your hand, then declare <em>Hú</em>.
+        </div>
+
+        <!-- Example: a complete winning hand -->
+        <div class="example-hand">
+          <div class="eh-label">Example complete hand · 14 tiles</div>
+          <div class="eh-row">
+            <div class="eh-group">
+              <span class="meld-group">
+                <span class="tile eh"><img src="tiles/wan-2.svg" alt=""></span><span class="tile eh"><img src="tiles/wan-3.svg" alt=""></span><span class="tile eh"><img src="tiles/wan-4.svg" alt=""></span>
+              </span>
+              <span class="eh-tag">Chī</span>
+            </div>
+            <div class="eh-group">
+              <span class="meld-group">
+                <span class="tile eh"><img src="tiles/tiao-5.svg" alt=""></span><span class="tile eh"><img src="tiles/tiao-5.svg" alt=""></span><span class="tile eh"><img src="tiles/tiao-5.svg" alt=""></span>
+              </span>
+              <span class="eh-tag">Pèng</span>
+            </div>
+            <div class="eh-group">
+              <span class="meld-group">
+                <span class="tile eh"><img src="tiles/bing-7.svg" alt=""></span><span class="tile eh"><img src="tiles/bing-8.svg" alt=""></span><span class="tile eh"><img src="tiles/bing-9.svg" alt=""></span>
+              </span>
+              <span class="eh-tag">Chī</span>
+            </div>
+            <div class="eh-group">
+              <span class="meld-group">
+                <span class="tile eh"><img src="tiles/east.svg" alt=""></span><span class="tile eh"><img src="tiles/east.svg" alt=""></span><span class="tile eh"><img src="tiles/east.svg" alt=""></span>
+              </span>
+              <span class="eh-tag">Pèng</span>
+            </div>
+            <div class="eh-group">
+              <span class="meld-group">
+                <span class="tile eh"><img src="tiles/red.svg" alt=""></span><span class="tile eh"><img src="tiles/red.svg" alt=""></span>
+              </span>
+              <span class="eh-tag">Duì · "eyes"</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="melds-h">A "meld" is one of these:</div>
+
+        <!-- CHI -->
+        <div class="meld-card">
+          <div class="meld-header">
+            <span class="meld-name"><span class="zh">吃</span> Chī</span>
+            <span class="meld-rule">3 in a row · same suit</span>
+          </div>
+          <div class="meld-examples">
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/wan-1.svg" alt=""></span><span class="tile meld"><img src="tiles/wan-2.svg" alt=""></span><span class="tile meld"><img src="tiles/wan-3.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/tiao-4.svg" alt=""></span><span class="tile meld"><img src="tiles/tiao-5.svg" alt=""></span><span class="tile meld"><img src="tiles/tiao-6.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/bing-7.svg" alt=""></span><span class="tile meld"><img src="tiles/bing-8.svg" alt=""></span><span class="tile meld"><img src="tiles/bing-9.svg" alt=""></span>
+            </span>
+          </div>
+          <div class="meld-foot">Honor tiles (winds, dragons) cannot form a chī.</div>
+        </div>
+
+        <!-- PENG -->
+        <div class="meld-card">
+          <div class="meld-header">
+            <span class="meld-name"><span class="zh">碰</span> Pèng</span>
+            <span class="meld-rule">3 of a kind · any tile</span>
+          </div>
+          <div class="meld-examples">
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/wan-5.svg" alt=""></span><span class="tile meld"><img src="tiles/wan-5.svg" alt=""></span><span class="tile meld"><img src="tiles/wan-5.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/east.svg" alt=""></span><span class="tile meld"><img src="tiles/east.svg" alt=""></span><span class="tile meld"><img src="tiles/east.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/red.svg" alt=""></span><span class="tile meld"><img src="tiles/red.svg" alt=""></span><span class="tile meld"><img src="tiles/red.svg" alt=""></span>
+            </span>
+          </div>
+        </div>
+
+        <!-- GANG -->
+        <div class="meld-card">
+          <div class="meld-header">
+            <span class="meld-name"><span class="zh">杠</span> Gàng</span>
+            <span class="meld-rule">4 of a kind</span>
+          </div>
+          <div class="meld-examples">
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/tiao-4.svg" alt=""></span><span class="tile meld"><img src="tiles/tiao-4.svg" alt=""></span><span class="tile meld"><img src="tiles/tiao-4.svg" alt=""></span><span class="tile meld"><img src="tiles/tiao-4.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/white.svg" alt=""></span><span class="tile meld"><img src="tiles/white.svg" alt=""></span><span class="tile meld"><img src="tiles/white.svg" alt=""></span><span class="tile meld"><img src="tiles/white.svg" alt=""></span>
+            </span>
+          </div>
+          <div class="meld-foot">Declaring a gàng earns one bonus tile from the dead wall.</div>
+        </div>
+
+        <!-- PAIR -->
+        <div class="meld-card">
+          <div class="meld-header">
+            <span class="meld-name"><span class="zh">對</span> Duì</span>
+            <span class="meld-rule">2 of a kind · the "eyes"</span>
+          </div>
+          <div class="meld-examples">
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/bing-7.svg" alt=""></span><span class="tile meld"><img src="tiles/bing-7.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/south.svg" alt=""></span><span class="tile meld"><img src="tiles/south.svg" alt=""></span>
+            </span>
+            <span class="meld-group">
+              <span class="tile meld"><img src="tiles/green.svg" alt=""></span><span class="tile meld"><img src="tiles/green.svg" alt=""></span>
+            </span>
+          </div>
+          <div class="meld-foot">Every winning hand has exactly one duì.</div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ----- RIGHT COLUMN ----- -->
+    <div>
+
+      <!-- 03 — What you can do (turn move vs. discard claims) -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">03 · Turn</span>
+          <span class="section-title">What you can do<span class="zh">招</span><span class="pinyin">zhāo</span></span>
+        </div>
+
+        <!-- ON YOUR TURN — one move -->
+        <div class="turn-block">
+          <div class="turn-label">On your turn — one move</div>
+          <div class="move-head">
+            <span class="move-name">Draw <span class="zh">摸</span><span class="pinyin">mō</span> · then discard</span>
+          </div>
+          <p class="move-desc">Take one tile from the wall — you now hold 14. Discard one face-up into the middle to return to 13.</p>
+          <ul class="move-special">
+            <li>New tile makes you win → declare <strong>Hú</strong>, game ends.</li>
+            <li>Complete 4 of one tile → option to declare a <strong>concealed gàng</strong>; if you do, reveal it and draw one bonus tile, then discard.</li>
+          </ul>
+        </div>
+
+        <div class="turn-divider"><span>·</span></div>
+
+        <!-- ON ANY DISCARD — every player watches -->
+        <div class="turn-block">
+          <div class="turn-label">On any player's discard — every player watches</div>
+          <p class="move-desc">When the player whose turn it is discards a tile, any player may interrupt and claim it. Choose one — <strong>higher rank wins</strong> if multiple players want it:</p>
+          <div class="claims">
+            <div class="claim">
+              <span class="claim-rank">①</span>
+              <span class="claim-zh">胡</span>
+              <div class="claim-body">
+                <div class="claim-line"><span class="claim-name">Hú</span><span class="claim-tag">Anytime · any seat</span></div>
+                <p class="claim-desc">The tile completes your winning hand (4 melds + 1 duì). Game ends.</p>
+              </div>
+            </div>
+            <div class="claim">
+              <span class="claim-rank">②</span>
+              <span class="claim-zh">杠</span>
+              <div class="claim-body">
+                <div class="claim-line"><span class="claim-name">Gàng</span><span class="claim-tag">Anytime · any seat</span></div>
+                <p class="claim-desc">Take it to make four of a kind. Reveal the meld face-up and draw one bonus tile, then discard.</p>
+              </div>
+            </div>
+            <div class="claim">
+              <span class="claim-rank">③</span>
+              <span class="claim-zh">碰</span>
+              <div class="claim-body">
+                <div class="claim-line"><span class="claim-name">Pèng</span><span class="claim-tag">Anytime · any seat</span></div>
+                <p class="claim-desc">Take it to make three of a kind. Reveal the meld face-up, then discard.</p>
+              </div>
+            </div>
+            <div class="claim">
+              <span class="claim-rank">④</span>
+              <span class="claim-zh">吃</span>
+              <div class="claim-body">
+                <div class="claim-line"><span class="claim-name">Chī</span><span class="claim-tag claim-tag-warn">Only from the player right before you</span></div>
+                <p class="claim-desc">Take it to make 3 in a row, same suit. Reveal the meld face-up, then discard.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Turn-order rules -->
+        <div class="turn-rules">
+          <div class="rule-h">How play continues</div>
+          <ul>
+            <li><b>No one claims</b> → turn passes counter-clockwise to the next player on the discarder's right.</li>
+            <li><b>After Pèng / Gàng / Chī</b> → claimer discards, then play continues with the player after them. Players in between are skipped.</li>
+            <li><b>After Hú</b> → game ends.</li>
+            <li><b>Wall empties with no winner</b> → game is a draw <span class="zh-jade">荒莊</span><span class="pinyin">huāng zhuāng</span>.</li>
+          </ul>
+        </div>
+
+        <div class="extras">
+          <div class="extra">
+            <div class="h">Concealed vs. exposed</div>
+            <p>Melds you build from your own draws stay concealed in hand. Melds claimed from a discard sit face-up.</p>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot">
+    <span>Mahjong · Hong Kong rules (standard hand only) · tiles &amp; play</span>
+    <span>made by <a href="https://x.com/heyyalexwang" target="_blank" rel="noopener">@heyyalexwang</a></span>
+  </footer>
+
+</div>
+
+<!-- ============ Tile rendering script ============ -->
+<script>
+  const TILES = {
+    wan: ['wan-1','wan-2','wan-3','wan-4','wan-5','wan-6','wan-7','wan-8','wan-9'],
+    tiao: ['tiao-1','tiao-2','tiao-3','tiao-4','tiao-5','tiao-6','tiao-7','tiao-8','tiao-9'],
+    bing: ['bing-1','bing-2','bing-3','bing-4','bing-5','bing-6','bing-7','bing-8','bing-9'],
+    wind: ['east','south','west','north'],
+    dragon: ['red','green','white'],
+  };
+
+  const NUM_LABEL = ['一','二','三','四','五','六','七','八','九'];
+  const WIND_LABEL = {
+    east:  { en: 'East',  py: 'dōng' },
+    south: { en: 'South', py: 'nán'  },
+    west:  { en: 'West',  py: 'xī'   },
+    north: { en: 'North', py: 'běi'  },
+  };
+  const DRAGON_LABEL = {
+    red:   { en: 'Red',   py: 'zhōng' },
+    green: { en: 'Green', py: 'fā'    },
+    white: { en: 'White', py: 'bái'   },
+  };
+
+  function tileEl(id, size) {
+    const t = document.createElement('span');
+    t.className = `tile ${size || 'sm'}`;
+    const img = document.createElement('img');
+    img.src = `tiles/${id}.svg`;
+    img.alt = id;
+    t.appendChild(img);
+    return t;
+  }
+
+  function fillNumberedRow(rowId, suit) {
+    const row = document.getElementById(rowId);
+    TILES[suit].forEach((id, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'tile-with-num';
+      wrap.appendChild(tileEl(id, 'suit'));
+      row.appendChild(wrap);
+    });
+  }
+
+  function fillHonorRow(rowId, group, labelMap) {
+    const row = document.getElementById(rowId);
+    const isDragon = group === 'dragon';
+    TILES[group].forEach((id) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'tile-with-num';
+      wrap.appendChild(tileEl(id, 'suit'));
+      const lbl = document.createElement('div');
+      lbl.className = 'num';
+      const { en, py } = labelMap[id];
+      const colorLine = document.createElement('span');
+      colorLine.style.display = 'block';
+      colorLine.textContent = en;
+      lbl.appendChild(colorLine);
+      if (isDragon) {
+        const dragonLine = document.createElement('span');
+        dragonLine.style.display = 'block';
+        dragonLine.textContent = 'Dragon';
+        lbl.appendChild(dragonLine);
+      }
+      const pyLine = document.createElement('span');
+      pyLine.style.display = 'block';
+      pyLine.className = 'pinyin';
+      pyLine.style.fontStyle = 'italic';
+      pyLine.textContent = py;
+      lbl.appendChild(pyLine);
+      wrap.appendChild(lbl);
+      row.appendChild(wrap);
+    });
+  }
+
+  fillNumberedRow('row-wan', 'wan');
+  fillNumberedRow('row-tiao', 'tiao');
+  fillNumberedRow('row-bing', 'bing');
+  fillHonorRow('row-wind', 'wind', WIND_LABEL);
+  fillHonorRow('row-dragon', 'dragon', DRAGON_LABEL);
+</script>
+
+</body>
+</html>
